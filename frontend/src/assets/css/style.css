@@ -1,0 +1,49 @@
+/* 모든 페이지에 적용되는 css */
+
+/* web font */
+@font-face {
+	font-family: "NEXONLv2Gothic";
+	src:
+		url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv2 Gothic.woff")
+		format("woff");
+	font-weight: normal;
+	font-style: normal;
+}
+
+body {
+	font-family: "NEXONLv2Gothic";
+}
+
+/* footer */
+footer {
+	position: relative;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+}
+
+.font-size-2 {
+	font-size: 1.5rem;
+}
+
+.link-none {
+	text-decoration: none;
+	color: black;
+}
+
+td>a:hover {
+	color: yellow;
+}
+
+/* searchResult */
+#deal-container {
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+	transition: 0.4s;
+	cursor: pointer;
+	box-shadow:
+}
+
+#deal-container:hover {
+	transform: translate(0, -3px);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
