@@ -30,28 +30,30 @@ export default {
   },
   watch: {
     juso() {
-      this.initMap();
+      this.panTo(this.map);
     },
   },
   methods: {
     initMap() {
       const container = document.getElementById("map");
+      const options = {
+        center: new kakao.maps.LatLng(33.450701, 126.570667),
+        level: 5,
+      };
+      this.map = new kakao.maps.Map(container, options);
+      this.panTo(this.map);
+    },
+    panTo(map) {
       // 주소-좌표 변환 객체를 생성합니다
       var geocoder = new kakao.maps.services.Geocoder();
-
       // 주소로 좌표를 검색합니다
-      geocoder.addressSearch(this.juso, function(result, status) {
+      var callback = function (result, status) {
         // 정상적으로 검색이 완료됐으면 
         if (status === kakao.maps.services.Status.OK) {
-          const options = {
-            center: new kakao.maps.LatLng(result[0].y, result[0].x),
-            level: 5,
-          };
-          //지도 객체를 등록합니다.
-          //지도 객체는 반응형 관리 대상이 아니므로 initMap에서 선언합니다.
-          this.map = new kakao.maps.Map(container, options);
+          map.panTo(new kakao.maps.LatLng(result[0].y, result[0].x));
         }
-      });
+      };
+      geocoder.addressSearch(this.juso, callback);
     },
     changeSize(size) {
       const container = document.getElementById("map");
