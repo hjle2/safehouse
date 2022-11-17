@@ -42,7 +42,7 @@ const routes = [
     component: HouseListItem,
   },
   {
-    path: '/news/:no',
+    path: '/news',
     name: 'news',
     component: AppNews,
   },

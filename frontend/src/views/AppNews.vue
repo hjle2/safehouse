@@ -29,19 +29,20 @@ export default {
     }
   },
     methods: {
-		getNewss(pageNum) {
-			let ipage = this.page;
-			if (pageNum) ipage = pageNum;
-			const NEWS_URL = `/news/${ipage}`;
-			http
-			.get(NEWS_URL)
-			.then(({data}) => {
-				this.newss = data;
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-		},
+      getNewss(pageNum) {
+        const NEWS_URL = `/news/${pageNum}`;
+        http
+        .get(NEWS_URL)
+        .then(({data}) => {
+          this.newss = data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      },
+    },
+    created() {
+      this.getNewss(1);
     },
 }
 </script>

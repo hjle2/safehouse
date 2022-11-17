@@ -7,7 +7,7 @@
 		
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav>
-        <b-nav-item href="/news/1">뉴스</b-nav-item>
+        <b-nav-item href="/news">뉴스</b-nav-item>
         <b-nav-item href="/board">게시판</b-nav-item>
       </b-navbar-nav>
       
