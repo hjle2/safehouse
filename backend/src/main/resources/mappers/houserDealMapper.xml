@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- name space는 UserRepo의 fully qualified name으로 설정한다. -->
+<mapper namespace="com.ssafy.happyhouse.mapper.HouseDealMapper">
+	
+	<select id="selectHouseDeals" parameterType="string" resultType="HouseDeal">
+		SELECT  i.aptCode aptCode, aptName, round(avg(replace(dealAmount, ',', '')), 0) dealAmount, count(*) cnt, i.lat lat, i.lng lng
+		FROM houseinfo i
+		JOIN housedeal d ON i.aptCode = d.aptCode 
+		WHERE dongCode = #{query}
+		group by i.aptCode
+	</select>
+	
+	<select id="selectDealDetails" parameterType="string" resultType="HouseDealDetail">
+		SELECT dealAmount, dealYear, dealMonth, dealDay, area, floor
+		FROM housedeal
+		WHERE aptCode = #{query}
+	</select>
+		<select id="getSido" resultType="sidoGugunCodeDto">
+		select left(sidoCode,2) sidoCode, sidoName
+		from sidocode
+		order by sidoCode
+	</select>
+	
+	<select id="getGugunInSido" parameterType="string" resultType="sidoGugunCodeDto">
+		select left(gugunCode,5) gugunCode, gugunName
+		from guguncode
+		where left(gugunCode,2) = #{sido}
+		order by gugunCode
+	</select>
+	
+	<select id="getDongInGugun" parameterType="string" resultType="sidoGugunCodeDto">
+		select distinct dongName, dongCode
+		from houseinfo
+		where left(dongCode, 5) = #{gugun}
+		order by dongName
+	</select>
+	
+</mapper>
