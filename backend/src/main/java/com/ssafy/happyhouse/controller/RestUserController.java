@@ -21,7 +21,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import com.ssafy.happyhouse.dto.User;
-import com.ssafy.happyhouse.service.EncryptionService;
+import com.ssafy.happyhouse.service.SecurityService;
 import com.ssafy.happyhouse.service.UserService;
 
 @RestController
@@ -30,11 +30,11 @@ import com.ssafy.happyhouse.service.UserService;
 public class RestUserController {
 	
 	private String salt="";
-	private EncryptionService Encryption;
+	private SecurityService Encryption;
 	private UserService uService;
 	private final Logger logger = LoggerFactory.getLogger(RestHouseController.class);
 	@Autowired
-	public RestUserController(UserService uService,EncryptionService Encryption) {
+	public RestUserController(UserService uService,SecurityService Encryption) {
 		this.uService = uService;
 		this.Encryption = Encryption;
 	}
