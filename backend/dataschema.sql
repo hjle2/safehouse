@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS safehouse.members (
   name VARCHAR(45) NOT NULL,
   addr VARCHAR(45) NULL,
   tel VARCHAR(45) NULL,
+  refreshtoken VARCHAR(64) NULL,
   PRIMARY KEY (id))
 ENGINE = InnoDB;
 
