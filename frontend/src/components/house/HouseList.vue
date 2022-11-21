@@ -1,22 +1,21 @@
 <template>
 	<!-- main -->
-	<div class="d-flex justify-content-center align-items-center">
-		<div class="bg-light p-5 rounded container-xl my-5">
-			<div id="resultname">
+	<div class="justify-content-center align-items-center bg-light p-5 rounded container-xl my-5">
+		<div id="resultname">
 				<h3>{{juso}}</h3>
-				</div>
-			<hr />
+		</div>
+		<hr />
 			<b-row>
 				<b-container style="display:flex" v-if="houses && houses.length != 0" class="bv-example-row mt-3">
 				
-				<b-col cols="6" align="left">
-					<h3 v-if="houses" class="bg-warning p-2">거래정보</h3>
-					<house-list-item v-for="(house, index) in houses" :key="index" :house="house"></house-list-item>
-				</b-col>
+					<b-col cols="5" align="left">
+						<h3 v-if="houses" class="bg-warning p-2">거래정보</h3>
+						<house-list-item v-for="(house, index) in houses" :key="index" :house="house"></house-list-item>
+					</b-col>
 
-				<b-col cols="6" v-if="juso">
-					<kakao-map id="map" :juso="juso"></kakao-map>
-				</b-col>
+					<b-col cols="7">
+						<kakao-map id="map" :juso="juso" :houses="houses"></kakao-map>
+					</b-col>
 				
 				</b-container>
 				<b-container v-else class="bv-example-row mt-3">
@@ -25,7 +24,6 @@
 					</b-row>
 				</b-container>
 			</b-row>
-		</div>
 	</div>
 </template>
 
@@ -64,5 +62,8 @@ export default {
 </script>
 
 <style>
+kakao-map {
+	width: 100%;
 
+}
 </style>

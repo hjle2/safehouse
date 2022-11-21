@@ -93,24 +93,25 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
-    getHouseList({ commit }, gugunCode) {
+    getHouseList({ commit }, dongCode) {
       // vue cli enviroment variables 검색
       //.env.local file 생성.
       // 반드시 VUE_APP으로 시작해야 한다.
-      const SERVICE_KEY = process.env.VUE_APP_APT_DEAL_API_KEY;
-      // const SERVICE_KEY =
-      //   "######################## Service Key ########################";
-      const SERVICE_URL =
-        "http://openapi.molit.go.kr/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTradeDev";
-      const params = {
-        LAWD_CD: gugunCode,
-        DEAL_YMD: "202207",
-        serviceKey: decodeURIComponent(SERVICE_KEY),
-      };
+      // const SERVICE_KEY = process.env.VUE_APP_APT_DEAL_API_KEY;
+      // // const SERVICE_KEY =
+      // //   "######################## Service Key ########################";
+      // const SERVICE_URL =
+      //   "http://openapi.molit.go.kr/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTradeDev";
+      // const params = {
+      //   LAWD_CD: gugunCode,
+      //   DEAL_YMD: "202207",
+      //   serviceKey: decodeURIComponent(SERVICE_KEY),
+      // };
+      const params = {dongCode: dongCode}
       http
-        .get(SERVICE_URL, { params })
+        .get(`/house/deallist`, { params })
         .then(({ data }) => {
-          commit("SET_HOUSE_LIST", data.response.body.items.item);
+          commit("SET_HOUSE_LIST", data);
         })
         .catch((error) => {
           console.log(error);

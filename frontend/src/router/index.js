@@ -32,7 +32,7 @@ const routes = [
     ],
   },
   {
-    path: '/',
+    path: '/house',
     name: 'house',
     component: AppHouse,
   },

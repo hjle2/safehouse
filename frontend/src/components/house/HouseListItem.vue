@@ -5,15 +5,15 @@
         <div id="deal-container" class="border p-2 mb-1 rounded" @click="selectHouse">
         <div class="d-flex justify-content-between">
         <div>
-            <h5>아파트명 : {{house.아파트 }}</h5>
+            <h5>아파트명 : {{house.aptName }}</h5>
         </div>
         <div> 
             <h5>
-                <!-- <span class="badge bg-secondary">{{deal.cnt }}</span> -->
+                <span class="badge bg-secondary">{{house.cnt }}</span>
             </h5>
         </div>
         </div>
-        <h6>거래 금액 : {{house.거래금액 }}</h6>
+        <h6>거래 금액 : {{house.dealAmount }}</h6>
         </div>
         </div>
     </div>

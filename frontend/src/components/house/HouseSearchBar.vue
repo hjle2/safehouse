@@ -70,7 +70,7 @@ export default {
         juso += " " + this.dongCode.juso;
       }
       this.SET_JUSO(juso);
-      this.getHouseList(this.gugunCode.code);
+      this.getHouseList(this.dongCode.code);
     },
   },
 };
