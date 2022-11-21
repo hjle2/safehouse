@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <main>
     <the-header-nav-bar></the-header-nav-bar>
-    <router-view></router-view>
+    <main class="d-flex justify-content-center align-items-center">
+      <router-view></router-view>
     </main>
     <the-footer></the-footer>
   </div>

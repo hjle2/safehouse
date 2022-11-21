@@ -48,7 +48,7 @@ export default {
       const container = document.getElementById("map");
       const options = {
         center: new kakao.maps.LatLng(33.450701, 126.570667),
-        level: 3,
+        level: 5,
       };
       this.map = new kakao.maps.Map(container, options);
       this.panTo(this.map);
@@ -61,7 +61,7 @@ export default {
       this.clusterer = new kakao.maps.MarkerClusterer({
           map: this.map, // 마커들을 클러스터로 관리하고 표시할 지도 객체 
           averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
-          minLevel: 5 // 클러스터 할 최소 지도 레벨 
+          minLevel: 6 // 클러스터 할 최소 지도 레벨 
         });
     },
     initMarker() {

@@ -1,5 +1,5 @@
 <template>
-<div class="bg-light p-5 rounded container-xl my-5">
+<div class="bg-light p-5 rounded container-xl">
     <h3 class="underline-steelblue"><b-icon icon="person-lines-fill"></b-icon> Member Service</h3>
     <router-view></router-view>
   </div>

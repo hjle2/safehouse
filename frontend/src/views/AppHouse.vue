@@ -1,8 +1,8 @@
 <template>
-  <b-container class="bv-example-row mt-3 text-center">
+<div class="bg-light p-5 rounded container-xl">
     <house-side-bar></house-side-bar>
 		<kakao-map :juso="juso"></kakao-map>
-  </b-container>
+</div>
 </template>
 <script>
 import HouseSideBar from "@/components/house/HouseSideBar.vue";

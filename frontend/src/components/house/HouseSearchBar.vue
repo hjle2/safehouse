@@ -1,25 +1,22 @@
 <template>
-<div>
-  <b-row class="mt-4 mb-4 text-center">
-    <!-- <b-col class="sm-3">
-      <b-form-input
-        v-model.trim="dongCode"
-        placeholder="동코드 입력...(예 : 11110)"
-        @keypress.enter="sendKeyword"
-      ></b-form-input>
-    </b-col> -->
-    <b-col class="sm-3">
-      <b-form-select v-model="sidoCode" :options="sidos" @change="gugunList"></b-form-select>
-    </b-col>
-    <b-col class="sm-3">
-      <b-form-select v-model="gugunCode" :options="guguns" @change="dongList"></b-form-select>
-    </b-col>
-    <b-col class="sm-3">
-      <b-form-select v-model="dongCode" :options="dongs"></b-form-select>
-    </b-col>
-    <b-button class="sm-3" variant="outline-primary" @click="searchApt">검색</b-button>
-  </b-row>
-  </div>
+<div class="text-center">
+  <table class="mx-auto">
+    <tbody>
+      <tr>
+        <td>
+        <b-form-select v-model="sidoCode" :options="sidos" @change="gugunList"></b-form-select>
+        </td>
+        <td>
+          <b-form-select v-model="gugunCode" :options="guguns" @change="dongList"></b-form-select>
+        </td>
+        <td>
+          <b-form-select v-model="dongCode" :options="dongs"></b-form-select>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+    <input class="btn btn-md btn-warning w-25 mt-3" @click="searchApt" value="검색" />
+</div>
 </template>
 
 <script>
@@ -45,7 +42,7 @@ export default {
     this.getSido();
   },
   methods: {
-    ...mapActions(["getSido", "getGugun", "getDong", "getHouseList"]),
+    ...mapActions(["getSido", "getGugun", "getDong", "getHouseListSi", "getHouseListGun", "getHouseListDong"]),
     ...mapMutations(["CLEAR_SIDO_LIST", "CLEAR_GUGUN_LIST", "CLEAR_DONG_LIST", "CLEAR_APT_LIST", "SET_JUSO"]),
 
     dongList() {
@@ -59,21 +56,36 @@ export default {
       if (this.sidoCode) this.getGugun(this.sidoCode.code);
     },
     searchApt() {
+      if (this.sidoCode == null)
+        return;
+
       let juso = "";
-      if (this.sidoCode.juso) {
+      
+      if (this.sidoCode != null) {
         juso += this.sidoCode.juso;
       }
-      if (this.gugunCode.juso) {
+      if (this.gugunCode != null) {
         juso += " " + this.gugunCode.juso;
       }
-      if (this.dongCode.juso) {
+      if (this.dongCode != null) {
         juso += " " + this.dongCode.juso;
       }
       this.SET_JUSO(juso);
-      this.getHouseList(this.dongCode.code);
+      
+      if (this.gugunCode == null) {
+        alert('주소를 선택해주세요.');
+        // this.getHouseListSi(this.sidoCode.code);
+      } 
+      else if (this.dongCode == null) {
+        this.getHouseListGun(this.gugunCode.code);
+      } 
+      else {
+        this.getHouseListDong(this.dongCode.code);
+      }
     },
   },
 };
 </script>
 
-<style></style>
+<style>
+</style>

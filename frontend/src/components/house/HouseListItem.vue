@@ -1,22 +1,19 @@
 <template>
-  <div>
-    {{msg}}
-    <div id="content" class="p-2">
-        <div id="deal-container" class="border p-2 mb-1 rounded" @click="selectHouse">
-        <div class="d-flex justify-content-between">
-        <div>
-            <h5>아파트명 : {{house.aptName }}</h5>
-        </div>
-        <div> 
-            <h5>
-                <span class="badge bg-secondary">{{house.cnt }}</span>
-            </h5>
-        </div>
-        </div>
-        <h6>거래 금액 : {{house.dealAmount }}</h6>
-        </div>
-        </div>
+<div id="content" class="p-2">
+    <div id="deal-container" class="border p-2 mb-1 rounded" @click="selectHouse">
+    <div class="d-flex justify-content-between">
+    <div>
+        <h5 align="left">아파트명 : {{house.aptName }}</h5>
     </div>
+    <div> 
+        <h5>
+            <span class="badge bg-secondary">{{house.cnt }}</span>
+        </h5>
+    </div>
+    </div>
+        <h6 align="left">평균 거래액 : {{house.dealAmount }}</h6>
+    </div>
+</div>
 </template>
 
 <script>
@@ -60,5 +57,9 @@ export default {
 #deal-container:hover {
 	transform: translate(0, -3px);
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.bg-secondary {
+    color: white;
 }
 </style>

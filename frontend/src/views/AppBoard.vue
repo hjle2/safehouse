@@ -1,5 +1,5 @@
 <template>
-<div class="bg-light p-5 rounded container-xl my-5">
+<div class="bg-light p-5 rounded container-xl">
     <h3>QnA</h3>
     <hr>
     <router-view></router-view>

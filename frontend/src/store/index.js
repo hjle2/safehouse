@@ -6,9 +6,9 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    sidos: [{ value: null, text: "선택하세요" }],
-    guguns: [{ value: null, text: "선택하세요" }],
-    dongs: [{ value: null, text: "선택하세요" }],
+    sidos: [{ value: {code: "", juso: ""}, text: "선택하세요" }],
+    guguns: [{ value: {code: "", juso: ""}, text: "선택하세요" }],
+    dongs: [{ value: {code: "", juso: ""}, text: "선택하세요" }],
     juso: "",
     houses: [],
     house: null,
@@ -63,7 +63,6 @@ export default new Vuex.Store({
       http
         .get(`/house/sido`)
         .then(({ data }) => {
-          // console.log(data);
           commit("SET_SIDO_LIST", data);
         })
         .catch((error) => {
@@ -75,7 +74,6 @@ export default new Vuex.Store({
       http
         .get(`/house/gugun`, { params })
         .then(({ data }) => {
-          // console.log(commit, response);
           commit("SET_GUGUN_LIST", data);
         })
         .catch((error) => {
@@ -93,7 +91,7 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
-    getHouseList({ commit }, dongCode) {
+    getHouseListSi({ commit }, code) {
       // vue cli enviroment variables 검색
       //.env.local file 생성.
       // 반드시 VUE_APP으로 시작해야 한다.
@@ -107,9 +105,31 @@ export default new Vuex.Store({
       //   DEAL_YMD: "202207",
       //   serviceKey: decodeURIComponent(SERVICE_KEY),
       // };
-      const params = {dongCode: dongCode}
+      const params = {code: code}
       http
-        .get(`/house/deallist`, { params })
+        .get(`/house/list/sido`, { params })
+        .then(({ data }) => {
+          commit("SET_HOUSE_LIST", data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getHouseListGun({ commit }, code) {
+      const params = {code: code}
+      http
+        .get(`/house/list/gugun`, { params })
+        .then(({ data }) => {
+          commit("SET_HOUSE_LIST", data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getHouseListDong({ commit }, code) {
+      const params = {code: code}
+      http
+        .get(`/house/list/dong`, { params })
         .then(({ data }) => {
           commit("SET_HOUSE_LIST", data);
         })
