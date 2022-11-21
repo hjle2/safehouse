@@ -13,6 +13,7 @@ export default new Vuex.Store({
     houses: [],
     house: null,
     newss: [],
+    polices: [],
   },
   getters: {
   },
@@ -54,6 +55,9 @@ export default new Vuex.Store({
     },
     SET_DETAIL_HOUSE(state, house) {
       state.house = house;
+    },
+    SET_POLICE(state, polices) {
+      state.polices = polices;
     },
     /////////////////////////////// House end /////////////////////////////////////
   },
@@ -116,7 +120,7 @@ export default new Vuex.Store({
         });
     },
     getHouseListGun({ commit }, code) {
-      const params = {code: code}
+      const params = {code: code};
       http
         .get(`/house/list/gugun`, { params })
         .then(({ data }) => {
@@ -127,11 +131,23 @@ export default new Vuex.Store({
         });
     },
     getHouseListDong({ commit }, code) {
-      const params = {code: code}
+      const params = {code: code};
       http
         .get(`/house/list/dong`, { params })
         .then(({ data }) => {
           commit("SET_HOUSE_LIST", data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getPoliceStations({commit}, code) {
+      const params = {code: code}
+      http
+        .get(`/house/list/police`, { params })
+        .then(({ data }) => {
+          console.log(data);
+          commit("SET_POLICE", data);
         })
         .catch((error) => {
           console.log(error);

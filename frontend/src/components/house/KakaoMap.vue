@@ -1,10 +1,9 @@
 <template>
-    <div id="map">
-    </div>
+<div id="app"></div>
 </template>
 
-<script>
-// import http from "@/api/http";
+<script> 
+import { mapState } from "vuex";
 export default {
   name: "KakaoMap",
   props: {
@@ -30,18 +29,19 @@ export default {
       document.head.appendChild(script);
     }
   },
+  computed: {
+    ...mapState(["polices"]),
+  },
   watch: {
     juso() {
       this.panTo(this.map);
       this.coords = this.map.getCenter();
-    },
-    houses() {
-      for (let marker of this.markers) {
-        marker.setMap(null);
-        this.clusterer.removeMarker(marker);
-      }
+
+      // 지우기
+      this.clusterer.clear();
+      // 표시
       this.initMarker();
-    }
+    },
   },
   methods: {
     initMap() {
@@ -51,10 +51,37 @@ export default {
         level: 5,
       };
       this.map = new kakao.maps.Map(container, options);
+      this.ps = new kakao.maps.services.Places(this.map); 
+
       this.panTo(this.map);
       
       this.initClusterer();
       this.initMarker();
+      this.initPoliceStations();
+    },
+    initPoliceStations() {
+      for (let police of this.polices) {
+        let circle = new kakao.maps.Circle({
+            radius: 50, // 미터 단위의 원의 반지름입니다 
+            strokeWeight: 5, // 선의 두께입니다 
+            strokeColor: '#75B8FA', // 선의 색깔입니다
+            strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+            strokeStyle: 'dashed', // 선의 스타일 입니다
+            fillColor: '#CFE7FF', // 채우기 색깔입니다
+            fillOpacity: 0.7  // 채우기 불투명도 입니다   
+        }); 
+        // 주소-좌표 변환 객체를 생성합니다
+        var geocoder = new kakao.maps.services.Geocoder();
+        // 주소로 좌표를 검색합니다
+        var callback = function (result, status) {
+          // 정상적으로 검색이 완료됐으면 
+          if (status === kakao.maps.services.Status.OK) {
+            circle.center = new kakao.maps.LatLng(result[0].y, result[0].x);
+            circle.setMap(this.map);
+          }
+        };
+          geocoder.addressSearch(police.addr, callback);
+        }
     },
     initClusterer() {
       // 마커 클러스터러를 생성합니다 
@@ -88,19 +115,19 @@ export default {
         });
         
         // 마커에 클릭이벤트를 등록합니다
-        kakao.maps.event.addListener(marker, 'mouseover', this.makeOverListener(this.map, marker, infowindow) );
-        kakao.maps.event.addListener(marker, 'mouseout', this.makeOutListener(infowindow));
+        kakao.maps.event.addListener(marker, 'mouseover', this.mouseOverListener(this.map, marker, infowindow) );
+        kakao.maps.event.addListener(marker, 'mouseout', this.mouseOutListener(infowindow));
         
         this.markers.push(marker);
       }
       this.clusterer.addMarkers(this.markers);
     },
-    makeOverListener(map, marker, infowindow) {
+    mouseOverListener(map, marker, infowindow) {
           return function() {
               infowindow.open(map, marker);
           };
     },
-    makeOutListener(infowindow) {
+    mouseOutListener(infowindow) {
           return function() {
               infowindow.close();
           };
@@ -169,6 +196,7 @@ export default {
 
       this.map.setCenter(iwPosition);
     },
+    
   },
 };
 </script>

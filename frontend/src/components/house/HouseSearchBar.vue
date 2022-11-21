@@ -42,7 +42,7 @@ export default {
     this.getSido();
   },
   methods: {
-    ...mapActions(["getSido", "getGugun", "getDong", "getHouseListSi", "getHouseListGun", "getHouseListDong"]),
+    ...mapActions(["getSido", "getGugun", "getDong", "getHouseListSi", "getHouseListGun", "getHouseListDong", "getPoliceStations"]),
     ...mapMutations(["CLEAR_SIDO_LIST", "CLEAR_GUGUN_LIST", "CLEAR_DONG_LIST", "CLEAR_APT_LIST", "SET_JUSO"]),
 
     dongList() {
@@ -82,6 +82,8 @@ export default {
       else {
         this.getHouseListDong(this.dongCode.code);
       }
+
+      this.getPoliceStations(this.gugunCode.code);
     },
   },
 };

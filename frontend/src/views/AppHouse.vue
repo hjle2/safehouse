@@ -1,18 +1,18 @@
 <template>
-<div class="bg-light p-5 rounded container-xl">
-    <house-side-bar></house-side-bar>
-		<kakao-map :juso="juso"></kakao-map>
+<div>
+    <!-- <house-side-bar></house-side-bar> -->
+		<full-kakao-map :juso="juso"></full-kakao-map>
 </div>
 </template>
 <script>
-import HouseSideBar from "@/components/house/HouseSideBar.vue";
-import KakaoMap from "@/components/house/KakaoMap";
+// import HouseSideBar from "@/components/house/HouseSideBar.vue";
+import FullKakaoMap from "@/components/house/FullKakaoMap";
 
 export default {
   name: "AppHouse",
   components: {
-    HouseSideBar,
-    KakaoMap,
+    // HouseSideBar,
+    FullKakaoMap,
   },
   data() {
     return {
