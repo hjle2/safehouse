@@ -35,21 +35,48 @@ public class RestHouseController {
 		this.hMapService = hMapService;
 	}
 	
-	@GetMapping("/deallist")
-	public ResponseEntity<?> houseDeals(String juso, Model model) {
-		StringTokenizer st= new StringTokenizer(juso);
-		st.nextToken();
-		st.nextToken();
-		String DongCode = st.nextToken(); 
+	@GetMapping("/list/dong")
+	public ResponseEntity<?> houseDeals(@RequestParam(value="code" ,required=false)String code) {
+		System.out.println("dong 도착");
 		List<HouseDeal> houselist;
 		try {
-			houselist = hService.selectHouseDeals(DongCode);
+			houselist = hService.selectHouseDeals(code);
 			return new ResponseEntity<List<HouseDeal>>(houselist, HttpStatus.OK);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("데이터 에러 발생");
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
 	}
+	
+	@GetMapping("/list/sido")
+	public ResponseEntity<?> housesidoDeals(@RequestParam(value="code" ,required=false)String code) {
+		System.out.println("시도 도착");
+		List<HouseDeal> houselist;
+		try {
+			houselist = hService.selectsidoHouseDeals(code);
+			return new ResponseEntity<List<HouseDeal>>(houselist, HttpStatus.OK);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("데이터 에러 발생");
+			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	@GetMapping("/list/gugun")
+	public ResponseEntity<?> housegugunDeals(@RequestParam(value="code" ,required=false)String code) {
+		System.out.println("구군 도착");
+		List<HouseDeal> houselist;
+		try {
+			houselist = hService.selectgugunHouseDeals(code);
+			return new ResponseEntity<List<HouseDeal>>(houselist, HttpStatus.OK);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("데이터 에러 발생");
+			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		}
+	}
+	
 	@GetMapping("/dealist/detail")
 	public ResponseEntity<List<HouseDealDetail>> houseDetail (@RequestParam("aptCode") String aptCode){
 //		

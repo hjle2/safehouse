@@ -70,4 +70,10 @@ public class HouseDeal {
 		this.cnt = cnt;
 	}
 
+	@Override
+	public String toString() {
+		return "HouseDeal [aptCode=" + aptCode + ", cnt=" + cnt + ", aptName=" + aptName + ", dealAmount=" + dealAmount
+				+ ", lat=" + lat + ", lng=" + lng + "]";
+	}
+
 }

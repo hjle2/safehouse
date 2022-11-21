@@ -31,6 +31,16 @@ public class HouseDealServiceImpl implements HouseDealService {
 		return mapper.selectDealDetails(aptCode);
 	}
 
+	@Override
+	public List<HouseDeal> selectsidoHouseDeals(String dongCode) throws SQLException {
+		return mapper.selectsidoHouseDeals(dongCode);
+	}
+
+	@Override
+	public List<HouseDeal> selectgugunHouseDeals(String dongCode) throws SQLException {
+		return mapper.selectgugunHouseDeals(dongCode);
+	}
+
 	
 
 

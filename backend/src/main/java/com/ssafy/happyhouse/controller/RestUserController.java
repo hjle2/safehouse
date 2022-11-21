@@ -41,13 +41,15 @@ public class RestUserController {
 	
 	//login
 	@PostMapping("/login")
-	public ResponseEntity<?> login (@RequestBody Map<String,String> s){
+	public ResponseEntity<?> login (@RequestBody User user){
 		logger.info("login");
-		String id = s.get("id");
-		String pwd = s.get("pwd");
-		pwd = Encryption.Encryption(pwd,salt);
+		String passwd = user.getPwd();
+		passwd = Encryption.Encryption(passwd,salt);
 		try {
-			User target=uService.login(id, pwd);
+			User target=uService.login(user.getId(), passwd);
+			if(target== null) {
+				return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+			}
 			return new ResponseEntity<User>(target,HttpStatus.OK);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -72,7 +74,7 @@ public class RestUserController {
 	}
 	//findpassword 임시 비밀번호 발급할 것.
 	@PostMapping("/findpwd")
-	public ResponseEntity<?> findPassword(@RequestBody String id, @RequestParam("tel") String tel){
+	public ResponseEntity<?> findPassword(@RequestBody String id, @RequestBody String tel){
 		try {
 			String temppass = Encryption.tempPassGenerate();
 			User userdata = uService.searchPwdByIdTel(id, tel);

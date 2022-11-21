@@ -9,6 +9,9 @@ import com.ssafy.happyhouse.dto.SidoGugunCodeDto;
 
 public interface HouseDealMapper {
 	List<HouseDeal> selectHouseDeals(String dongCode) throws SQLException;
+	List<HouseDeal> selectsidoHouseDeals(String sido) throws SQLException;
+	List<HouseDeal> selectgugunHouseDeals(String gugun) throws SQLException;
+	
 	List<HouseDealDetail> selectDealDetails(String aptCode) throws SQLException;
 	List<SidoGugunCodeDto> getSido() throws SQLException;
 	List<SidoGugunCodeDto> getGugunInSido(String sido) throws Exception;

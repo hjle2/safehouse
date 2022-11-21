@@ -7,22 +7,52 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.happyhouse.dto.PoliceStationDto;
+import com.ssafy.happyhouse.dto.SidoGugunCodeDto;
+import com.ssafy.happyhouse.mapper.DataMapper;
 
 @RestController
 @RequestMapping("/api")
 public class DataController {
 	
+	@Autowired
+	DataMapper mapper;
 	// @Autowired
 	// DatainsertSerive
+	@GetMapping("/dong")
+	public void InsertDong() throws IOException {
+		BufferedReader br  = new BufferedReader(new FileReader("C:\\Users\\multicampus\\Desktop\\data\\data2.csv"));
+		//List<SidoGugunCodeDto> donglist; 
+		while(true) {
+			String s = br.readLine();
+			if(s == null) break;
+			StringTokenizer st = new StringTokenizer(s,",");
+			String sidoName = st.nextToken();
+			String gugunName = st.nextToken();
+			String dongName = st.nextToken();
+			String dongCode = st.nextToken();
+			
+			if(sidoName.equals(gugunName)) continue;
+			SidoGugunCodeDto temp = new SidoGugunCodeDto();
+			temp.setSidoName(sidoName);
+			temp.setGugunName(gugunName);
+			temp.setDongName(dongName);
+			temp.setDongCode(dongCode);
+			
+			System.out.println(sidoName + " "+ gugunName + " " + dongName + " " + dongCode);
+			mapper.insertDong(temp);
+		}
+	}
+	
 	
 	@GetMapping("/police")
 	public void InsertData() throws IOException {
-		BufferedReader br  = new BufferedReader(new FileReader("C:\\Users\\User\\Desktop\\데이터\\경찰청_전국 경찰서별 강력범죄 발생 현황_2020.csv"));
+		BufferedReader br  = new BufferedReader(new FileReader("C:\\Users\\multicampus\\Desktop\\datareposit\\dataset\\2016GradeData.csv"));
 		List<PoliceStationDto> data = new ArrayList<>();
 		int i =0;
 		while(true) {
@@ -33,6 +63,7 @@ public class DataController {
 				continue;
 			}
 			StringTokenizer st = new StringTokenizer(s,",");
+			st.nextToken();
 			int year = Integer.parseInt(st.nextToken());
 			String Policestation = st.nextToken();
 			int murder = Integer.parseInt(st.nextToken());

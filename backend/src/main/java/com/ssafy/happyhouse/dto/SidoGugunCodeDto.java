@@ -9,6 +9,7 @@ public class SidoGugunCodeDto {
 	private String gugunName;
 	private String dongCode;
 	private String dongName;
+	
 
 	public String getDongCode() {
 		return dongCode;

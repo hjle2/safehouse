@@ -9,6 +9,8 @@ import com.ssafy.happyhouse.dto.SidoGugunCodeDto;
 
 public interface HouseDealService {
 	List<HouseDeal> selectHouseDeals(String dongCode) throws SQLException;
+	List<HouseDeal> selectsidoHouseDeals(String dongCode) throws SQLException;
+	List<HouseDeal> selectgugunHouseDeals(String dongCode) throws SQLException;
 	List<HouseDealDetail> selectDealDetails(String aptCode) throws SQLException;
 }
 

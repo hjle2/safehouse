@@ -59,7 +59,7 @@ public class SecurityServiceImpl implements SecurityService{
 
 	
 	//jwt functions
-
+	/*
 	@Override
 	public TokenDto generateJwToken(User user) {
 		Date dateD = new Date();
@@ -126,7 +126,7 @@ public class SecurityServiceImpl implements SecurityService{
 		claims.put("roles", user.getTel());
 		return claims;
 	}
-	
+	*/
 	//토큰 검증
 
 }
