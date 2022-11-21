@@ -29,10 +29,11 @@ DROP TABLE IF EXISTS safehouse.members ;
 
 CREATE TABLE IF NOT EXISTS safehouse.members (
   id VARCHAR(45) NOT NULL,
-  pwd VARCHAR(45) NOT NULL,
+  pwd VARCHAR(64) NOT NULL,
   name VARCHAR(45) NOT NULL,
   addr VARCHAR(45) NULL,
   tel VARCHAR(45) NULL,
+  refreshtoken VARCHAR(64) NULL,
   PRIMARY KEY (id))
 ENGINE = InnoDB;
 

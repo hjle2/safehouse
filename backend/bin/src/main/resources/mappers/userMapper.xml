@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- name space는 BookRepo의 fully qualified name으로 설정한다. -->
+<mapper namespace="com.ssafy.happyhouse.mapper.UserMapper">
+	<select id="login" parameterType="string" resultType="User">
+		SELECT *
+		FROM members
+		WHERE id = #{id}
+	</select>
+	
+	<update id="update" parameterType="User">
+		UPDATE members
+		SET pwd =
+		#{pwd}, name = #{name}, addr = #{addr}, tel = #{tel}
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete" parameterType="User">
+		DELETE FROM members
+		WHERE id =
+		#{id}
+	</delete>
+
+	<select id="searchById" parameterType="string" resultType="User">
+		SELECT *
+		FROM members
+		WHERE id = #{id}
+	</select>
+
+	<select id="searchPwdByIdTel" parameterType="User"
+		resultType="string">
+		SELECT pwd
+		FROM members
+		WHERE id = #{id} and tel = #{tel}
+	</select>
+
+	<insert id="addUser" parameterType="User">
+		INSERT INTO members(id,pwd,name,addr,tel)
+		VALUES(#{id}, #{pwd},#{name},#{addr},#{tel})
+	</insert>
+	
+</mapper>
