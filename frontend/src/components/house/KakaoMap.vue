@@ -4,6 +4,7 @@
 </template>
 
 <script>
+// import http from "@/api/http";
 export default {
   name: "KakaoMap",
   props: {
@@ -37,6 +38,7 @@ export default {
     houses() {
       for (let marker of this.markers) {
         marker.setMap(null);
+        this.clusterer.removeMarker(marker);
       }
       this.initMarker();
     }
@@ -46,30 +48,21 @@ export default {
       const container = document.getElementById("map");
       const options = {
         center: new kakao.maps.LatLng(33.450701, 126.570667),
-        level: 5,
+        level: 3,
       };
       this.map = new kakao.maps.Map(container, options);
       this.panTo(this.map);
       
+      this.initClusterer();
       this.initMarker();
-      // this.initClusterer();
     },
     initClusterer() {
+      // 마커 클러스터러를 생성합니다 
       this.clusterer = new kakao.maps.MarkerClusterer({
-        map: this.map,
-        markers: this.markers,
-        gridSize: 35,
-        averageCenter: true,
-        minLevel: 6,
-        disableClickZoom: true,
-        styles: [{
-            width : '53px', height : '52px',
-            background: 'url(cluster.png) no-repeat',
-            color: '#fff',
-            textAlign: 'center',
-            lineHeight: '54px'
-        }]
-      });
+          map: this.map, // 마커들을 클러스터로 관리하고 표시할 지도 객체 
+          averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
+          minLevel: 5 // 클러스터 할 최소 지도 레벨 
+        });
     },
     initMarker() {
       let arr = new Array();
@@ -97,9 +90,10 @@ export default {
         // 마커에 클릭이벤트를 등록합니다
         kakao.maps.event.addListener(marker, 'mouseover', this.makeOverListener(this.map, marker, infowindow) );
         kakao.maps.event.addListener(marker, 'mouseout', this.makeOutListener(infowindow));
-
+        
         this.markers.push(marker);
       }
+      this.clusterer.addMarkers(this.markers);
     },
     makeOverListener(map, marker, infowindow) {
           return function() {

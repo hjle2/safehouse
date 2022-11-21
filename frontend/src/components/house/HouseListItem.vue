@@ -48,7 +48,17 @@ export default {
 .apt {
   width: 50px;
 }
-.mouse-over-bgcolor {
-  background-color: lightblue;
+
+/* searchResult */
+#deal-container {
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+	transition: 0.4s;
+	cursor: pointer;
+	box-shadow:
+}
+
+#deal-container:hover {
+	transform: translate(0, -3px);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 </style>
