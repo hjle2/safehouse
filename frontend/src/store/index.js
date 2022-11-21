@@ -125,7 +125,7 @@ export default new Vuex.Store({
     /////////////////////////////// House end /////////////////////////////////////
     login({commit}, user) {
       http
-      .post(`/user/login`, user.id)
+      .post(`/user/login`, user)
       .then(() => {
         commit("LOGIN", {id:user.id, pwd:user.pwd});
         alert("로그인 성공!");
