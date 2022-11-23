@@ -89,7 +89,7 @@ public class DataController {
 	
 	@GetMapping("/location")
 	public void InsertLocation() throws IOException {
-		BufferedReader br  = new BufferedReader(new FileReader("C:\\Users\\multicampus\\Desktop\\bbb\\dataset\\policefixed2.csv"));
+		BufferedReader br  = new BufferedReader(new FileReader("C:\\Users\\multicampus\\Desktop\\bbb\\dataset\\policefixed3.csv"));
 		List<policeoffice> policelist = new ArrayList<>();
 		int i = 0;
 		while(true) {
@@ -104,7 +104,9 @@ public class DataController {
 			st.nextToken();
 			String name = st.nextToken();
 			String addr = st.nextToken();
-			policelist.add(new policeoffice(name,addr));
+			String lat = st.nextToken();
+			String lng = st.nextToken();
+			policelist.add(new policeoffice(name,addr,lat,lng));
 			
 		}
 		System.out.println(policelist.get(0));

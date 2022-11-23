@@ -55,7 +55,7 @@
 	</select>
 	
 	<select id="selectpoliceinfo" resultType="CrimePoliceDto">
-		select c.policestation policestation, round(avg(averrage)) grade, p.addr addr 
+		select c.policestation policestation, round(avg(averrage)) grade, p.addr addr , p.lat lat, p.lng lng
 		from crime c  
 		join policestation p on c.policestation = p.name
 		group by policestation
