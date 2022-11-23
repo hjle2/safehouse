@@ -9,4 +9,16 @@
 		values(#{dongCode},#{sidoName},#{gugunName},#{dongName})
 	</insert>
 
+	<insert id="insertcrime" parameterType="PoliceStationDto" >
+		insert into crime(year,policestation,murder,rob,theft,assault,murdergrade,robgrade,theftgrade,assaultgrade,averrage)
+		values(#{year},#{location},#{murder},#{rob},#{theft},#{assualt}, #{murderGrade},#{robGrade},#{theftGrade},#{assualtGrade},#{aver})
+	</insert>
+
+	<insert id="insertpolice" parameterType="policeoffice">
+		insert into policestation(name,addr)
+		values (#{name},#{addr})
+	
+	</insert>
+
+
 </mapper>

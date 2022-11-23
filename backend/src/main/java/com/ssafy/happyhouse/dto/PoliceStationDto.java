@@ -11,6 +11,7 @@ public class PoliceStationDto {
 	int robGrade;
 	int theftGrade;
 	int assualtGrade;
+	String aver;
 	public int getYear() {
 		return year;
 	}
@@ -28,6 +29,12 @@ public class PoliceStationDto {
 	}
 	public void setMurder(int murder) {
 		this.murder = murder;
+	}
+	public String getAver() {
+		return aver;
+	}
+	public void setAver(String aver) {
+		this.aver = aver;
 	}
 	public int getRob() {
 		return rob;
@@ -73,7 +80,7 @@ public class PoliceStationDto {
 	}
 	
 	public PoliceStationDto(int year, String location, int murder, int rob, int theft, int assualt, int murderGrade,
-			int robGrade, int theftGrade, int assualtGrade) {
+			int robGrade, int theftGrade, int assualtGrade , String aver) {
 		super();
 		this.year = year;
 		this.location = location;
@@ -85,6 +92,7 @@ public class PoliceStationDto {
 		this.robGrade = robGrade;
 		this.theftGrade = theftGrade;
 		this.assualtGrade = assualtGrade;
+		this.aver = aver;
 	}
 	@Override
 	public String toString() {

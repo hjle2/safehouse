@@ -10,20 +10,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.happyhouse.dto.CrimePoliceDto;
 import com.ssafy.happyhouse.dto.HouseDeal;
 import com.ssafy.happyhouse.dto.HouseDealDetail;
 import com.ssafy.happyhouse.dto.SidoGugunCodeDto;
+import com.ssafy.happyhouse.dto.policeoffice;
 import com.ssafy.happyhouse.service.HouseDealService;
 import com.ssafy.happyhouse.service.HouseMapService;
 
 @RestController
 @RequestMapping("/house")
+@CrossOrigin("*")
 public class RestHouseController {
 	private HouseDealService hService;
 	private HouseMapService hMapService;
@@ -34,12 +38,25 @@ public class RestHouseController {
 		this.hService = hService;
 		this.hMapService = hMapService;
 	}
+	@GetMapping("/list/police")
+	public ResponseEntity<?> policeinfo(){
+		System.out.println("police 도착");
+		try {
+			List<CrimePoliceDto> location= hService.selectofficelocation();
+			return new ResponseEntity<List<CrimePoliceDto>>(location,HttpStatus.OK);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return new ResponseEntity<policeoffice>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	
 	@GetMapping("/list/dong")
 	public ResponseEntity<?> houseDeals(@RequestParam(value="code" ,required=false)String code) {
 		System.out.println("dong 도착");
 		List<HouseDeal> houselist;
 		try {
+			
 			houselist = hService.selectHouseDeals(code);
 			return new ResponseEntity<List<HouseDeal>>(houselist, HttpStatus.OK);
 		} catch (SQLException e) {
@@ -126,6 +143,6 @@ public class RestHouseController {
 			return new ResponseEntity<List<SidoGugunCodeDto>>(HttpStatus.NO_CONTENT);
 		}
 	}
-
+	
 
 }
