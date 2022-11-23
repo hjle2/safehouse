@@ -6,10 +6,6 @@
 import { mapState } from "vuex";
 export default {
   name: "KakaoMap",
-  props: {
-    juso: String,
-    houses: Array,
-  },
   data() {
     return {
       coords: {},
@@ -30,7 +26,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(["polices"]),
+    ...mapState(["houses", "juso", "polices"]),
   },
   watch: {
     juso() {
@@ -59,29 +55,49 @@ export default {
       this.initMarker();
       this.initPoliceStations();
     },
-    initPoliceStations() {
-      for (let police of this.polices) {
-        let circle = new kakao.maps.Circle({
-            radius: 50, // 미터 단위의 원의 반지름입니다 
-            strokeWeight: 5, // 선의 두께입니다 
-            strokeColor: '#75B8FA', // 선의 색깔입니다
-            strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-            strokeStyle: 'dashed', // 선의 스타일 입니다
-            fillColor: '#CFE7FF', // 채우기 색깔입니다
-            fillOpacity: 0.7  // 채우기 불투명도 입니다   
-        }); 
-        // 주소-좌표 변환 객체를 생성합니다
-        var geocoder = new kakao.maps.services.Geocoder();
-        // 주소로 좌표를 검색합니다
-        var callback = function (result, status) {
-          // 정상적으로 검색이 완료됐으면 
+    async getLatLng(addr) {
+      // 주소-좌표 변환 객체를 생성합니다
+      let geocoder = new kakao.maps.services.Geocoder();
+
+      return await new Promise((resolve) => {
+        geocoder.addressSearch(addr, function (result, status) {
+          // 정상적으로 검색이 완료됐으면
           if (status === kakao.maps.services.Status.OK) {
-            circle.center = new kakao.maps.LatLng(result[0].y, result[0].x);
-            circle.setMap(this.map);
+            resolve(new kakao.maps.LatLng(result[0].y, result[0].x));
           }
-        };
-          geocoder.addressSearch(police.addr, callback);
+        });
+      });
+    },
+    async initPoliceStations() {
+      for (let police of this.polices) {
+        let fillcolor = '#CFE7FF';
+        let strokecolor = '#75B8FA';
+        let center = await this.getLatLng(police.addr);
+        if (police.grade === 2) {
+          fillcolor = '#82e989';
+          strokecolor = '#2dc937';
         }
+        else if (police.grade === 3) {
+          fillcolor = '#ffbe47';
+          strokecolor = '#ee9a00';
+        }
+        else if (police.grade === 4) {
+          fillcolor = '#ffa288';
+          strokecolor = '#ff5829';
+        }
+
+        let circle = new kakao.maps.Circle({
+            radius: 1500, // 미터 단위의 원의 반지름입니다 
+            strokeWeight: 1, // 선의 두께입니다 
+            strokeColor: strokecolor, // 선의 색깔입니다
+            strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+            strokeStyle: 'solid', // 선의 스타일 입니다
+            fillColor: fillcolor, // 채우기 색깔입니다
+            fillOpacity: 0.4,  // 채우기 불투명도 입니다
+            center,
+        });
+        circle.setMap(this.map);
+      }
     },
     initClusterer() {
       // 마커 클러스터러를 생성합니다 
@@ -206,7 +222,6 @@ export default {
 #map {
   width: 100%;
   height: 100%;
-  min-height: 500px;
 }
 
 .button-group {

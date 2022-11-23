@@ -59,6 +59,8 @@ export default new Vuex.Store({
     SET_POLICE(state, polices) {
       state.polices = polices;
     },
+    LOGIN() {
+    },
     /////////////////////////////// House end /////////////////////////////////////
   },
   actions: {
@@ -141,12 +143,10 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
-    getPoliceStations({commit}, code) {
-      const params = {code: code}
+    getPoliceStations({commit}) {
       http
-        .get(`/house/list/police`, { params })
+        .get(`/house/list/police`)
         .then(({ data }) => {
-          console.log(data);
           commit("SET_POLICE", data);
         })
         .catch((error) => {
@@ -163,20 +163,36 @@ export default new Vuex.Store({
       http
       .post(`/user/login`, user)
       .then(() => {
-        commit("LOGIN", {id:user.id, pwd:user.pwd});
         alert("로그인 성공!");
+        sessionStorage.setItem("islogin", true);
         location.href='/';
       })
       .catch((error) => {
         console.log(error);
+        commit("LOGIN");
       });
     },
     register({commit}, user) {
       http
       .post(`/user/regist`, user)
-      .then(({data}) => {
-        console.log(data);
-        commit("LOGIN", user);
+      .then(() => {
+        alert('회원가입 성공!');
+        location.href='/';
+      })
+      .catch((error) => {
+        console.log(error);
+        if (error.response.status === 500) {
+          alert('이미 있는 아이디 입니다.')
+        }
+        commit("LOGIN");
+      });
+    },
+    findpwd(id, tel) {
+      http
+      .post(`/user/findpwd`, {id, tel})
+      .then((data) => {
+        alert('비밀번호',  data);
+        location.href='/user/login';
       })
       .catch((error) => {
         console.log(error);

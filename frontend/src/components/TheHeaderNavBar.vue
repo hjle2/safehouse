@@ -11,12 +11,12 @@
         <b-nav-item href="/board">게시판</b-nav-item>
       </b-navbar-nav>
       
-      <!-- <div>
+      <div v-if="isLogin">
       <b-navbar-nav class="ml-auto">
         <b-nav-item @click="logout">로그아웃</b-nav-item>
       </b-navbar-nav>
-      </div> -->
-      <div>
+      </div>
+      <div v-else>
       <b-navbar-nav class="ml-auto">
         <b-nav-item href="/user/join">회원가입</b-nav-item>
         <b-nav-item href="/user/login">로그인</b-nav-item>
@@ -34,10 +34,14 @@ export default {
 	name: "TheHeaderNavBar",
   data() {
     return {
+      isLogin: false,
     }
   },
   methods: {
     logout() {
+      this.isLogin = false;
+      sessionStorage.removeItem('islogin');
+      this.$router.push({name: "main"});
     },
   },
   computed: {
@@ -45,6 +49,7 @@ export default {
     // ...mapMutations(["LOGOUT"]),
   },
   created() {
+    this.isLogin = sessionStorage.getItem('islogin');
   },
 }
 </script>

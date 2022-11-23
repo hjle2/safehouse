@@ -1,9 +1,12 @@
 <template>
-  <div id="app">
+  <div id="app" style="height:0%">
     <the-header-nav-bar></the-header-nav-bar>
     <main class="d-flex justify-content-center align-items-center">
       <router-view></router-view>
     </main>
+    <!-- <div style="height:100%;">
+      <router-view></router-view>
+    </div> -->
     <the-footer></the-footer>
   </div>
 </template>
@@ -21,12 +24,19 @@ export default {
 </script>
 
 <style>
+html {
+  height: 100%;
+}
+body {
+  height: 100%;
+}
 main {
 	min-height: 90vh;
 	background-image: url("@/assets/img/bg-img.jpg");
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center;
+  height: 100%;
 }
 
 nav {

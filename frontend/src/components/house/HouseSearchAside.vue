@@ -23,7 +23,7 @@
 import { mapState, mapActions, mapMutations } from "vuex";
 
 export default {
-  name: "HouseSearchBar",
+  name: "HouseSearchAside",
   data() {
     return {
       sidoCode: null,

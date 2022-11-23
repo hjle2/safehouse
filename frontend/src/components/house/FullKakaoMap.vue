@@ -1,8 +1,18 @@
 <template>
-<div class="map_wrap">
-    <div id="map" style="position:relative; overflow:hidden;"></div>
-
+<div class="map_wrap" style="height:100%">
+<div id="kakaomap" style="height:100%;overflow:hidden;"></div>
     <div id="menu_wrap" class="bg_white">
+    <b-button v-b-toggle.sidebar-right style="position:absolute;top:0;left:0;bottom:0;width:10px;">Toggle Sidebar</b-button>
+<b-sidebar id="sidebar-right" title="Sidebar" right shadow>
+      <div class="px-3 py-2">
+        <p>
+          Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis
+          in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+        </p>
+        <b-img src="https://picsum.photos/500/500/?image=54" fluid thumbnail></b-img>
+      </div>
+    </b-sidebar>
+<!--         
         <div class="option">
             <div>
                 <form onsubmit="searchPlaces(); return false;">
@@ -10,10 +20,10 @@
                     <button type="submit">검색하기</button> 
                 </form>
             </div>
-        </div>
-        <hr>
+        </div> -->
+        <!-- <hr>
         <ul id="placesList"></ul>
-        <div id="pagination"></div>
+        <div id="pagination"></div> -->
     </div>
 </div>
 </template>
@@ -21,44 +31,36 @@
 <script>
 export default {
     name: "FullKakaoMap",
-    props: {
-        juso: String,
-    },
     mounted() {
         if (window.kakao && window.kakao.maps) {
-        this.initMap();
+            this.initMap();
         } else {
-        const script = document.createElement("script");
-        /* global kakao */
-        script.onload = () => kakao.maps.load(this.initMap);
-        script.src =
-            "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=a5329ed71a6b0adbb1191e046f974b8a&libraries=services,clusterer";
-        document.head.appendChild(script);
+            const script = document.createElement("script");
+            /* global kakao */
+            script.onload = () => kakao.maps.load(this.initMap);
+            script.src =
+                "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=a5329ed71a6b0adbb1191e046f974b8a&libraries=services,clusterer";
+            document.head.appendChild(script);
         }
     },
     methods: {
         initMap() {
-        const container = document.getElementById("map");
-        const options = {
-            center: new kakao.maps.LatLng(33.450701, 126.570667),
-            level: 5,
-        };
-        this.map = new kakao.maps.Map(container, options);
-        this.ps = new kakao.maps.services.Places(this.map); 
-
-        this.panTo(this.map);
-        
-        this.initClusterer();
-        this.initMarker();
+            const container = document.getElementById("kakaomap");
+            const options = {
+                center: new kakao.maps.LatLng(33.450701, 126.570667),
+                level: 5,
+            };
+            this.map = new kakao.maps.Map(container, options);
+            this.ps = new kakao.maps.services.Places(this.map); 
         },
-    }
+    },
 }
 </script>
 
 <style>
 .map_wrap, .map_wrap * {margin:0;padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;font-size:12px;}
 .map_wrap a, .map_wrap a:hover, .map_wrap a:active{color:#000;text-decoration: none;}
-.map_wrap {position:relative;width:100%;height:700px;}
+.map_wrap {position:relative; width:100%;height:100%;}
 #menu_wrap {position:absolute;top:0;left:0;bottom:0;width:250px;margin:10px 0 30px 10px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:12px;border-radius: 10px;}
 .bg_white {background:#fff;}
 #menu_wrap hr {display: block; height: 1px;border: 0; border-top: 2px solid #5F5F5F;margin:3px 0;}

@@ -1,8 +1,6 @@
 <template>
-<div>
-    <!-- <house-side-bar></house-side-bar> -->
-		<full-kakao-map :juso="juso"></full-kakao-map>
-</div>
+<!-- <house-side-bar></house-side-bar> -->
+<full-kakao-map id="map"></full-kakao-map>
 </template>
 <script>
 // import HouseSideBar from "@/components/house/HouseSideBar.vue";
@@ -16,7 +14,6 @@ export default {
   },
   data() {
     return {
-      juso: "",
     }
   },
 };

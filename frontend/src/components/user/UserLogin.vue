@@ -1,43 +1,25 @@
 <template>
-  <b-container class="bv-example-row mt-3">
-    <b-row>
-      <b-col>
-        <b-alert variant="secondary" show><h3>로그인</h3></b-alert>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col></b-col>
-      <b-col cols="8">
-        <b-card class="text-center mt-3" style="max-width: 40rem" align="left">
-          <b-form class="text-left">
-            <b-alert show variant="danger" v-if="isLoginError">아이디 또는 비밀번호를 확인하세요.</b-alert>
-            <b-form-group label="아이디:" label-for="userid">
-              <b-form-input
-                id="userid"
-                v-model="user.id"
-                required
-                placeholder="아이디 입력...."
-                @keyup.enter="confirm"
-              ></b-form-input>
-            </b-form-group>
-            <b-form-group label="비밀번호:" label-for="userpwd">
-              <b-form-input
-                type="password"
-                id="userpwd"
-                v-model="user.pwd"
-                required
-                placeholder="비밀번호 입력...."
-                @keyup.enter="confirm"
-              ></b-form-input>
-            </b-form-group>
-            <b-button type="button" variant="primary" class="m-1" @click="confirm">로그인</b-button>
-            <!-- <b-button type="button" variant="success" class="m-1" @click="movePage">비밀번호 찾기</b-button> -->
-          </b-form>
-        </b-card>
-      </b-col>
-      <b-col></b-col>
-    </b-row>
-  </b-container>
+  <div id="main" class="container-xl p-5 my-5 text-white text-center rounded">
+        <div class="align-items-center">
+          <h3 class="p-1">로그인</h3>
+          <hr class="mb-5"/>
+          <div>
+            <div class="input-group mb-1 input-group-lg">
+              <span class="input-group-text w-25">아이디</span>
+              <input type="text" v-model="user.id" class="form-control">
+            </div>
+            <div class="input-group mb-1 input-group-lg">
+              <span class="input-group-text w-25">비밀번호</span>
+              <input type="password" v-model="user.pwd" class="form-control">
+            </div>
+            <button class="btn btn-warning btn-lg w-25 mt-5" @click="confirm">로그인</button>
+          </div>
+        </div>
+		<div class="mt-3">
+			<a class="text-light" href="/user/findpwd">비밀번호 찾기</a>&nbsp;&nbsp;&nbsp;
+			<a class="text-light" href="/user/join">회원가입</a>	
+		</div>
+      </div>
 </template>
 
 <script>
@@ -57,10 +39,15 @@ export default {
   methods: {
     ...mapActions(["login"]),
     confirm() {
+      console.log(this.user);
       this.login(this.user);
-    }
+    },
   },
 };
 </script>
 
-<style></style>
+<style>
+#main{
+    background-color: cadetblue;
+}
+</style>
