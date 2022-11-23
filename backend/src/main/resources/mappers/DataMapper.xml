@@ -15,8 +15,8 @@
 	</insert>
 
 	<insert id="insertpolice" parameterType="policeoffice">
-		insert into policestation(name,addr)
-		values (#{name},#{addr})
+		insert into policestation(name,addr,lat,lng)
+		values (#{name},#{addr}, #{lat},#{lng})
 	
 	</insert>
 

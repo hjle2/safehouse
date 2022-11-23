@@ -49,4 +49,9 @@ public class User {
 	public void setTel(String tel) {
 		this.tel = tel;
 	}
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", pwd=" + pwd + ", name=" + name + ", addr=" + addr + ", tel=" + tel + ", isLogin="
+				+ isLogin + "]";
+	}
 }

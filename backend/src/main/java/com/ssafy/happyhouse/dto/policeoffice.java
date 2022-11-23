@@ -3,6 +3,8 @@ package com.ssafy.happyhouse.dto;
 public class policeoffice {
 	String name;
 	String addr;
+	String lat;
+	String lng;
 	public String getName() {
 		return name;
 	}
@@ -16,10 +18,13 @@ public class policeoffice {
 		this.addr = addr;
 	}
 
-	public policeoffice(String name, String addr) {
+
+	public policeoffice(String name, String addr, String lat, String lng) {
 		super();
 		this.name = name;
 		this.addr = addr;
+		this.lat = lat;
+		this.lng = lng;
 	}
 	@Override
 	public String toString() {

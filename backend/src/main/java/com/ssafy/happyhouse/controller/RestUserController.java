@@ -43,14 +43,19 @@ public class RestUserController {
 	@PostMapping("/login")
 	public ResponseEntity<?> login (@RequestBody User user){
 		logger.info("login");
+		System.out.println(user);
+		if(user.getId()== null) {
+			return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+		}
 		String passwd = user.getPwd();
 		passwd = Encryption.Encryption(passwd,salt);
 		try {
 			User target=uService.login(user.getId(), passwd);
-			if(target== null) {
+			if(target.getId()== null) {
 				return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
 			}
-			return new ResponseEntity<User>(target,HttpStatus.OK);
+			String token = rUserKey(user);
+			return new ResponseEntity<String>(token,HttpStatus.OK);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -63,6 +68,17 @@ public class RestUserController {
 	@PostMapping("/regist")
 	public ResponseEntity<?> regist(@RequestBody User user){
 		logger.info("regist");
+		System.out.println(user);
+		if(user.getId() == null) return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+		try {
+			User CheckUser=uService.searchById(user.getId());
+			if(CheckUser != null) {
+				return new ResponseEntity<Void>(HttpStatus.IM_USED);
+			}
+		} catch (SQLException e1) {
+			new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+		}
+		
 		user.setPwd(Encryption.Encryption(user.getPwd(), salt));
 		try {
 			uService.addUser(user);
@@ -74,10 +90,11 @@ public class RestUserController {
 	}
 	//findpassword 임시 비밀번호 발급할 것.
 	@PostMapping("/findpwd")
-	public ResponseEntity<?> findPassword(@RequestBody String id, @RequestBody String tel){
+	public ResponseEntity<?> findPassword(@RequestBody User user){
+		System.out.println("find pwd도착함");
 		try {
 			String temppass = Encryption.tempPassGenerate();
-			User userdata = uService.searchPwdByIdTel(id, tel);
+			User userdata = uService.searchPwdByIdTel(user.getId(), user.getTel());
 			String EncodedTempass=Encryption.Encryption(temppass , salt);
 			userdata.setPwd(EncodedTempass);
 			uService.update(userdata);
@@ -119,24 +136,11 @@ public class RestUserController {
 	}
 	
 	
-	@PostMapping("/key")
-	public ResponseEntity<String> rUserKey(@RequestBody User user){
+	public String rUserKey( User user){
 		String salt = "Seoul13";
-		String baseurl = user.getId() + user.getPwd() + salt;
-		StringBuilder builder = new StringBuilder();
-		MessageDigest mod;
-		try {
-			mod = MessageDigest.getInstance("SHA-256");
-			mod.update(baseurl.getBytes());
-			byte data[]=mod.digest();
-			for(byte b : data) {
-				builder.append(String.format("%02x", b));
-			}
-			return new ResponseEntity<String>(builder.toString(),HttpStatus.OK);
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
-		}
+		String data = user.getId() + user.getTel();
+		String result=Encryption.Encryption(data, salt);
+		return result; 
 	}
 	
 	
