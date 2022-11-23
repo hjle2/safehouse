@@ -187,15 +187,16 @@ export default new Vuex.Store({
         commit("LOGIN");
       });
     },
-    findpwd(id, tel) {
+    findpwd({commit}, user) {
       http
-      .post(`/user/findpwd`, {id, tel})
+      .post(`/user/findpwd`, user)
       .then((data) => {
-        alert('비밀번호',  data);
+        alert('임시 비밀번호는 ' + data.data + ' 입니다.');
         location.href='/user/login';
       })
       .catch((error) => {
         console.log(error);
+        commit("LOGIN");
       });
     },
   },

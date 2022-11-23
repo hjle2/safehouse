@@ -6,11 +6,11 @@
     <hr class="mb-5"/>
       <div class="input-group mb-1 input-group-lg">
         <span class="input-group-text w-25">아이디</span>
-        <input type="text" v-model="id" class="form-control">
+        <input type="text" v-model="user.id" class="form-control">
       </div>
       <div class="input-group mb-1 input-group-lg">
         <span class="input-group-text w-25">전화번호</span>
-        <input type="tel" v-model="tel" placeholder="010-XXXX-XXXX" class="form-control">
+        <input type="tel" v-model="user.tel" placeholder="010-XXXX-XXXX" class="form-control">
       </div>
       <button @click="findPassword" class="btn btn-warning btn-lg w-25 mt-5">비밀번호 찾기</button>
   </div>
@@ -23,14 +23,16 @@ export default {
   name: "UserFindPwd",
   data() {
     return {
-      id: "",
-      tel: "",
+      user: {
+        id: "",
+        tel: "",
+      }
     }
   },
   methods: {
     ...mapActions(["findpwd"]),
     findPassword() {
-      this.findpwd(this.id, this.tel);
+      this.findpwd(this.user);
     }
   },
 }

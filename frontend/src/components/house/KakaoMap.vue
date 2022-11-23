@@ -8,7 +8,6 @@ export default {
   name: "KakaoMap",
   data() {
     return {
-      coords: {},
       markers: [],
       infowindow: null,
     };
