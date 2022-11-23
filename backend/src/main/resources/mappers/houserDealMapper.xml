@@ -54,4 +54,11 @@
 		order by dongName
 	</select>
 	
+	<select id="selectpoliceinfo" resultType="CrimePoliceDto">
+		select c.policestation policestation, round(avg(averrage)) grade, p.addr addr 
+		from crime c  
+		join policestation p on c.policestation = p.name
+		group by policestation
+	</select>
+	
 </mapper>

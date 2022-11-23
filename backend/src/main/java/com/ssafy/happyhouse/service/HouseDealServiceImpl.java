@@ -6,9 +6,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.happyhouse.dto.CrimePoliceDto;
 import com.ssafy.happyhouse.dto.HouseDeal;
 import com.ssafy.happyhouse.dto.HouseDealDetail;
 import com.ssafy.happyhouse.dto.SidoGugunCodeDto;
+import com.ssafy.happyhouse.dto.policeoffice;
 import com.ssafy.happyhouse.mapper.HouseDealMapper;
 
 @Service
@@ -39,6 +41,11 @@ public class HouseDealServiceImpl implements HouseDealService {
 	@Override
 	public List<HouseDeal> selectgugunHouseDeals(String dongCode) throws SQLException {
 		return mapper.selectgugunHouseDeals(dongCode);
+	}
+
+	@Override
+	public List<CrimePoliceDto> selectofficelocation() throws SQLException {
+		return mapper.selectpoliceinfo();
 	}
 
 	

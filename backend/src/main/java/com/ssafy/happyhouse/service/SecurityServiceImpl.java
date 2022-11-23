@@ -25,9 +25,9 @@ public class SecurityServiceImpl implements SecurityService{
 	private final String SecurityKey = "Seoul13";
 	private final Long AccessTokenexpiredPeriod = 1000* 60L * 60L * 3L;
 	private final Long RefreshTokenExpiredPeriod = 14 * 24 * 60 * 60 * 1000L;
+	
 	public SecurityServiceImpl() throws NoSuchAlgorithmException {
 		mod =  MessageDigest.getInstance("SHA-256");
-		
 	}
 	
 	
