@@ -1,8 +1,13 @@
 <template>
 <div class="map_wrap" style="height:100%">
-<div id="kakaomap" style="height:100%;overflow:hidden;"></div>
-    <b-button v-b-toggle.sidebar-right id="menu_btn">메뉴 보이기</b-button>
-    <b-sidebar id="sidebar-right" title="메뉴" right shadow>
+<div id="rvWrapper"  class="view_map" style="height:100%;overflow:hidden;"></div>
+<div id="mapWrapper" class="view_roadview" style="height:100%;overflow:hidden;"></div>
+<div id="over_map" class="custom_typecontrol">
+    <span class="btn" v-b-toggle.sidebar-right>MENU</span>
+
+    <span id="roadviewControl" @click="setRoadviewRoad"></span>
+</div>
+    <b-sidebar id="sidebar-right" right shadow>
         <div class="text-center">
   <table class="mx-auto">
     <tbody>
@@ -20,16 +25,16 @@
 
 	<div id="result">
 		<div id="resultname">
-				<h3>{{juso}}</h3>
+				<h4 style="margin:10px">{{juso}}</h4>
 		</div>
      <hr/>
-    <b-container v-if="houses && houses.length != 0" style="overflow-y:scroll;">
-            <h3 class="bg-warning p-2">거래정보</h3>
+    <div v-if="houses && houses.length != 0">
+            <h4 class="bg-warning p-2">거래정보</h4>
                 <house-list-item v-for="(house, index) in houses" :key="index" :house="house"></house-list-item>
-    </b-container>
-    <b-container v-else class="text-center">
+    </div>
+    <div v-else class="text-center" style="margin:10px">
         <b-col><b-alert show>주택 목록이 없습니다.</b-alert></b-col>
-    </b-container>
+    </div>
     </div>
     </div>
     </b-sidebar>
@@ -49,6 +54,7 @@ export default {
             sidoCode: null,
             gugunCode: null,
             dongCode: null,
+            isShow: false,
         };
     },
     created() {
@@ -129,12 +135,13 @@ export default {
 
         },
         initMap() {
-            const container = document.getElementById("kakaomap");
+            const container = document.getElementById("mapWrapper");
             const options = {
                 center: new kakao.maps.LatLng(37.5013068, 127.0396597),
                 level: 5,
             };
             this.map = new kakao.maps.Map(container, options);
+            
             this.ps = new kakao.maps.services.Places(this.map); 
 
             this.panTo(this.map);
@@ -142,6 +149,7 @@ export default {
             this.initClusterer();
             this.initMarker();
             this.initPoliceStations();
+            this.initRoadView();
         },
         async getLatLng(addr) {
             // 주소-좌표 변환 객체를 생성합니다
@@ -224,6 +232,67 @@ export default {
           minLevel: 6 // 클러스터 할 최소 지도 레벨 
         });
     },
+    initRoadView() {
+        let rvWrapper = document.getElementById('rvWrapper');
+        let rv = new kakao.maps.Roadview(rvWrapper);
+        let rvClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
+        // 지도와 로드뷰 위에 마커로 표시할 특정 장소의 좌표입니다
+        let center = this.map.getCenter();
+        // 로드뷰의 위치를 특정 장소를 포함하는 파노라마 ID로 설정합니다
+        // 로드뷰의 파노라마 ID는 Wizard를 사용하면 쉽게 얻을수 있습니다 
+
+        // 마커 이미지를 생성합니다.
+        var markImage = new kakao.maps.MarkerImage(
+            'https://t1.daumcdn.net/localimg/localimages/07/2018/pc/roadview_minimap_wk_2018.png',
+            new kakao.maps.Size(26, 46),
+            {
+                // 스프라이트 이미지를 사용합니다.
+                // 스프라이트 이미지 전체의 크기를 지정하고
+                spriteSize: new kakao.maps.Size(1666, 168),
+                // 사용하고 싶은 영역의 좌상단 좌표를 입력합니다.
+                // background-position으로 지정하는 값이며 부호는 반대입니다.
+                spriteOrigin: new kakao.maps.Point(705, 114),
+                offset: new kakao.maps.Point(13, 46)
+            }
+        );
+        // 드래그가 가능한 마커를 생성합니다.
+        var rvMarker = new kakao.maps.Marker({
+            image : markImage,
+            position: center,
+            draggable: true,
+            map: null,
+        });
+
+        let toggleRoadview = this.toggleRoadview;
+        //마커에 dragend 이벤트를 할당합니다
+        kakao.maps.event.addListener(rvMarker, 'dragend', function() {
+            var position = rvMarker.getPosition(); //현재 마커가 놓인 자리의 좌표
+            toggleRoadview(rvClient, rv, position); //로드뷰를 토글합니다
+        });
+
+        //지도에 클릭 이벤트를 할당합니다
+        kakao.maps.event.addListener(this.map, 'click', function(mouseEvent){
+            
+            // 현재 클릭한 부분의 좌표를 리턴 
+            var position = mouseEvent.latLng; 
+
+            rvMarker.setPosition(position);
+            toggleRoadview(rvClient, rv, position); //로드뷰를 토글합니다
+        });
+        let map = this.map;
+        // 로드뷰내의 화살표나 점프를 하였을 경우 발생한다.
+        // position값이 바뀔 때마다 map walker의 상태를 변경해 준다.
+        kakao.maps.event.addListener(rv, 'position_changed', function(){
+            // 이벤트가 발생할 때마다 로드뷰의 position값을 읽어, map walker에 반영 
+            var position = rv.getPosition();
+            rvMarker.setPosition(position);
+            map.setCenter(position);
+
+        });
+        this.rvMarker = rvMarker;
+        this.rv = rv;
+        this.rvClient = rvClient;
+    },
     initMarker() {
       let arr = new Array();
       for (let house of this.houses) {
@@ -248,16 +317,28 @@ export default {
         });
         
         // 마커에 클릭이벤트를 등록합니다
-        kakao.maps.event.addListener(marker, 'mouseover', this.mouseOverListener(this.map, infowindow) );
+        kakao.maps.event.addListener(marker, 'mouseover', this.mouseMarkerOverListener(this.map, marker, infowindow) );
         kakao.maps.event.addListener(marker, 'mouseout', this.mouseOutListener(infowindow));
         
         this.markers.push(marker);
       }
       this.clusterer.addMarkers(this.markers);
     },
+    mvRoadView(rvClient, center) {
+        let rv = this.rv;
+        rvClient.getNearestPanoId(center, function (panoId) {
+            rv.setPanoId(panoId, center); //panoId와 중심좌표를 통해 로드뷰 실행
+        });
+        
+    },
     mouseOverListener(map, infowindow) {
           return function() {
               infowindow.open(map);
+          };
+    },
+    mouseMarkerOverListener(map, marker, infowindow) {
+          return function() {
+              infowindow.open(map, marker);
           };
     },
     mouseOutListener(infowindow) {
@@ -269,15 +350,100 @@ export default {
         let latlng = await this.getLatLng(this.juso);
         this.map.panTo(latlng);
     },
+    setRoadviewRoad() {
+        var control = document.getElementById('roadviewControl');
+
+        // 버튼이 눌린 상태가 아니면
+        if (control.className.indexOf('active') === -1) {
+            control.className = 'active';
+
+            // 로드뷰 도로 오버레이가 보이게 합니다
+            this.toggleOverlay(true);
+        } else {
+            document.getElementById("mapWrapper").className = "view_roadview";
+            document.getElementById("rvWrapper").className = "view_map";
+            control.className = '';
+
+            // 로드뷰 도로 오버레이를 제거합니다
+            this.toggleOverlay(false);
+        }
+
+        // if (this.isShow) {
+        //     document.getElementById("mapWrapper").className = "view_map";
+        //     document.getElementById("rvWrapper").className = "view_roadview";
+        // }
+        // else {
+        //     document.getElementById("mapWrapper").className = "view_roadview";
+        //     document.getElementById("rvWrapper").className = "view_map";
+        // }
+        // this.isShow = !this.isShow;
+    },//로드뷰 toggle함수
+    toggleRoadview(rvClient, rv, position){
+
+        //전달받은 좌표(position)에 가까운 로드뷰의 panoId를 추출하여 로드뷰를 띄웁니다
+        rvClient.getNearestPanoId(position, 50, function(panoId) {
+            if (panoId !== null) {
+                rv.setPanoId(panoId, position); //panoId를 통한 로드뷰 실행
+                document.getElementById("mapWrapper").className = "view_map";
+                document.getElementById("rvWrapper").className = "view_roadview";
+            }
+        });
+    },
+    toggleOverlay(active) {
+        let map = this.map;
+        let marker = this.rvMarker;
+        
+        if (active) {
+            // overlayOn = true;
+
+            // 지도 위에 로드뷰 도로 오버레이를 추가합니다
+            map.addOverlayMapTypeId(kakao.maps.MapTypeId.ROADVIEW);
+
+            // 지도 위에 마커를 표시합니다
+            marker.setMap(map);
+            // 마커의 위치를 지도 중심으로 설정합니다 
+            marker.setPosition(map.getCenter());
+
+            // 로드뷰의 위치를 지도 중심으로 설정합니다
+            this.toggleRoadview(this.rvClient, this.rv, map.getCenter());
+        } else {
+            // overlayOn = false;
+
+            // 지도 위의 로드뷰 도로 오버레이를 제거합니다
+            map.removeOverlayMapTypeId(kakao.maps.MapTypeId.ROADVIEW);
+
+            // 지도 위의 마커를 제거합니다
+            marker.setMap(null);
+        }
+    }
     },
 }
 </script>
 
 <style>
-#menu_btn {
-position:absolute;top:0;left:0;margin:10px 0 30px 10px;background:rgba(255, 255, 255, 0.7);color: black; z-index: 1;border-radius: 10px;
+.view_map  {
+    z-index: 10;
+    display: none;
 }
-.map_wrap, .map_wrap * {margin:0;padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;font-size:12px;}
+.view_roadview  {
+    z-index: 0;
+}
+#menuControl {
+    background: url(https://t1.daumcdn.net/localimg/localimages/07/2018/pc/common/img_search.png) -230px -400px no-repeat;
+    width:55px;height:42px;
+}
+
+#over_map {
+    display: flex;
+    position:absolute;top:5px;left:5px;z-index: 1;border-radius: 10px;
+}
+#over_map * {
+    border: 0px; color: black; 
+    margin: 2px;
+}
+#roadviewControl {width:42px;height:42px;cursor: pointer; background: url(https://t1.daumcdn.net/localimg/localimages/07/2018/pc/common/img_search.png) 0 -450px no-repeat;}
+#roadviewControl.active {background-position:0 -350px;}
+.map_wrap, .map_wrap * {margin:0;padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;}
 .map_wrap a, .map_wrap a:hover, .map_wrap a:active{color:#000;text-decoration: none;}
 .map_wrap {position:relative; width:100%;height:100%;}
 #menu_wrap {position:absolute;top:0;left:0;bottom:0;width:250px;margin:10px 0 30px 10px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:12px;border-radius: 10px;}
@@ -286,31 +452,16 @@ position:absolute;top:0;left:0;margin:10px 0 30px 10px;background:rgba(255, 255,
 #menu_wrap .option{text-align: center;}
 #menu_wrap .option p {margin:10px 0;}  
 #menu_wrap .option button {margin-left:5px;}
-#placesList li {list-style: none;}
-#placesList .item {position:relative;border-bottom:1px solid #888;overflow: hidden;cursor: pointer;min-height: 65px;}
-#placesList .item span {display: block;margin-top:4px;}
-#placesList .item h5, #placesList .item .info {text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
-#placesList .item .info{padding:10px 0 10px 55px;}
-#placesList .info .gray {color:#8a8a8a;}
-#placesList .info .jibun {padding-left:26px;background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png) no-repeat;}
-#placesList .info .tel {color:#009900;}
-#placesList .item .markerbg {float:left;position:absolute;width:36px; height:37px;margin:10px 0 0 10px;background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png) no-repeat;}
-#placesList .item .marker_1 {background-position: 0 -10px;}
-#placesList .item .marker_2 {background-position: 0 -56px;}
-#placesList .item .marker_3 {background-position: 0 -102px}
-#placesList .item .marker_4 {background-position: 0 -148px;}
-#placesList .item .marker_5 {background-position: 0 -194px;}
-#placesList .item .marker_6 {background-position: 0 -240px;}
-#placesList .item .marker_7 {background-position: 0 -286px;}
-#placesList .item .marker_8 {background-position: 0 -332px;}
-#placesList .item .marker_9 {background-position: 0 -378px;}
-#placesList .item .marker_10 {background-position: 0 -423px;}
-#placesList .item .marker_11 {background-position: 0 -470px;}
-#placesList .item .marker_12 {background-position: 0 -516px;}
-#placesList .item .marker_13 {background-position: 0 -562px;}
-#placesList .item .marker_14 {background-position: 0 -608px;}
-#placesList .item .marker_15 {background-position: 0 -654px;}
-#pagination {margin:10px auto;text-align: center;}
-#pagination a {display:inline-block;margin-right:10px;}
-#pagination .on {font-weight: bold; cursor: default;color:#777;}
+
+.custom_typecontrol {position:absolute;top:10px;right:10px;overflow:hidden;width:130px;height:45px;margin:0;padding:0;z-index:1;font-size:12px;font-family:'Malgun Gothic', '맑은 고딕', sans-serif;}
+.custom_typecontrol span {display:block;float:left;text-align:center;line-height:30px;cursor:pointer;}
+.custom_typecontrol .btn {background:#fff;background:linear-gradient(#fff,  #e6e6e6);}       
+.custom_typecontrol .btn:hover {background:#f5f5f5;background:linear-gradient(#f5f5f5,#e3e3e3);}
+.custom_typecontrol .btn:active {background:#e6e6e6;background:linear-gradient(#e6e6e6, #fff);}    
+.custom_typecontrol .selected_btn {color:#fff;background:#425470;background:linear-gradient(#425470, #5b6d8a);}
+.custom_typecontrol .selected_btn:hover {color:#fff;}   
+.custom_zoomcontrol {position:absolute;top:50px;right:10px;width:36px;height:80px;overflow:hidden;z-index:1;background-color:#f5f5f5;} 
+.custom_zoomcontrol span {display:block;width:36px;height:40px;text-align:center;cursor:pointer;}     
+.custom_zoomcontrol span img {width:15px;height:15px;padding:12px 0;border:none;}             
+.custom_zoomcontrol span:first-child{border-bottom:1px solid #bfbfbf;}        
 </style>
