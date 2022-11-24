@@ -1,6 +1,7 @@
 package com.ssafy.happyhouse.controller;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -75,10 +76,14 @@ public class RestUserController {
 			if(CheckUser != null) {
 				return new ResponseEntity<Void>(HttpStatus.IM_USED);
 			}
+			
 		} catch (SQLException e1) {
 			new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 		}
-		
+
+		if (!KMP(user.getPwd(), user.getId())) {
+			return new ResponseEntity<Void>(HttpStatus.NOT_ACCEPTABLE);
+		}
 		user.setPwd(Encryption.Encryption(user.getPwd(), salt));
 		try {
 			uService.addUser(user);
@@ -135,7 +140,65 @@ public class RestUserController {
 			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 		}
 	}
+
+	private boolean KMP(String pw, String id) {
+		int pwLen = pw.length();
+		int idLen = id.length();
+		int table[] = new int[idLen];
+		for (int i = 1, j = 0; i < idLen; i++) {
+			while (j > 0 && id.charAt(i) != id.charAt(j)) {
+				j = table[j - 1];
+			}
+			if (id.charAt(i) == id.charAt(j)) {
+				table[i] = ++j;
+			} else {
+				table[i] = 0;
+			}
+		}
+		for (int i = 0, j = 0; i < pwLen; i++) {
+			while (j > 0 && pw.charAt(i) != id.charAt(j)) {
+				j = table[j - 1];
+			}
+			if (pw.charAt(i) == id.charAt(j)) {
+				if (j == idLen - 1) {
+					return true;
+				} else {
+					j++;
+				}
+			}
+		}
+		return false;
+	}
 	
+	private boolean boyerMoore(String text, String pattern) {
+		int[] badchar = new int[256];
+		int tLen = text.length(), pLen = pattern.length();
+		Arrays.fill(badchar, pLen);
+		badCharHeuristic(pattern, pLen, badchar);
+		
+		int s = 0, j;
+		while (s <= (tLen - pLen)) {
+			j = pLen - 1;
+			
+			while (j >= 0 && pattern.charAt(j) == text.charAt(s+j))
+				--j;
+			if (j < 0) {
+				return true;
+			}
+			s += badchar[text.charAt(s + j)];
+				
+			
+		}
+		return false;
+	}
+	
+	private void badCharHeuristic(String pattern, int size, int badchar[]) {
+		for (int i = 0; i < size; i++) {
+			badchar[(int)pattern.charAt(i)] = i;
+		}
+	}
+
+
 	
 	public String rUserKey( User user){
 		String salt = "Seoul13";
