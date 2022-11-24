@@ -9,7 +9,7 @@ import com.ssafy.happyhouse.dto.BoardParameterDto;
 
 public interface BoardMapper {
 	public int writeArticle(BoardDto boardDto) throws SQLException;
-	public List<BoardDto> listArticle() throws SQLException;
+	public List<BoardDto> listArticle(int pageNo) throws SQLException;
 	public int getTotalCount(BoardParameterDto boardParameterDto) throws SQLException;
 	public BoardDto getArticle(int no) throws SQLException;
 	public void updateHit(int articleno) throws SQLException;

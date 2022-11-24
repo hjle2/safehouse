@@ -44,7 +44,7 @@ public class RestUserController {
 	public ResponseEntity<?> login (@RequestBody User user){
 		logger.info("login");
 		System.out.println(user);
-		if(user.getId()== null) {
+		if(user.getId()== null || user.getPwd() == null) {
 			return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
 		}
 		String passwd = user.getPwd();
@@ -92,6 +92,7 @@ public class RestUserController {
 	@PostMapping("/findpwd")
 	public ResponseEntity<?> findPassword(@RequestBody User user){
 		System.out.println("find pwd도착함");
+		
 		try {
 			String temppass = Encryption.tempPassGenerate();
 			User userdata = uService.searchPwdByIdTel(user.getId(), user.getTel());

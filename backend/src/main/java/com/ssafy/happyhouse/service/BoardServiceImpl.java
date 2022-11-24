@@ -29,8 +29,8 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public List<BoardDto> select_qna() throws SQLException {
-		return bMapper.listArticle();
+	public List<BoardDto> select_qna(int pageNo) throws SQLException {
+		return bMapper.listArticle((pageNo-1)*10);
 	}
 
 	@Override

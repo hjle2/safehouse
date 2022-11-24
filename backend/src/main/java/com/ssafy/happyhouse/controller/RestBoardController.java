@@ -48,11 +48,11 @@ public class RestBoardController {
 	}
 	
 	
-	@GetMapping("/{no}")
-	public ResponseEntity<?> showBoard(){
+	@GetMapping("/{pageNo}")
+	public ResponseEntity<?> showBoard(@PathVariable int pageNo){
 		logger.info("list 호출");
 		try {
-			List<BoardDto> boardlist =bService.select_qna();
+			List<BoardDto> boardlist =bService.select_qna(pageNo);
 			System.out.println(boardlist.size());
 			return new ResponseEntity<List<BoardDto>>(boardlist,HttpStatus.OK);
 		} catch (SQLException e) {

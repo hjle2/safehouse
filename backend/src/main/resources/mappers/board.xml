@@ -9,7 +9,7 @@
 		values (#{userid}, #{subject}, #{content}, 0, now())
 	</insert>
 	
-	<select id="listArticle" resultType="boardDto">
+	<select id="listArticle" parameterType="int" resultType="boardDto">
 		SELECT no, id, title, content,
 				case when date_format(regtime, '%Y%m%d') = date_format(now(), '%Y%m%d')
 				then date_format(regtime, '%H:%i:%s')
@@ -17,6 +17,7 @@
 				end regtime
 		FROM qna 
 		order by no asc
+		limit #{no}, 10;
 		
 	</select>
 	
