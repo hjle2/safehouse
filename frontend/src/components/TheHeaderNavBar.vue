@@ -8,6 +8,7 @@
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav>
         <b-nav-item href="/news">NEWS</b-nav-item>
+        <b-nav-item href="/house">HOUSE</b-nav-item>
         <b-nav-item href="/board">BOARD</b-nav-item>
       </b-navbar-nav>
       

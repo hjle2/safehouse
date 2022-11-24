@@ -83,7 +83,7 @@ export default {
       else {
         this.getHouseListDong(this.dongCode.code);
       }
-
+      this.$router.push({name: "house"});
     },
   },
 };
