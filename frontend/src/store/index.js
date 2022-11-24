@@ -168,6 +168,7 @@ export default new Vuex.Store({
         location.href='/';
       })
       .catch((error) => {
+        alert('아이디나 비밀번호를 확인해주세요.');
         console.log(error);
         commit("LOGIN");
       });
@@ -181,7 +182,7 @@ export default new Vuex.Store({
       })
       .catch((error) => {
         console.log(error);
-        if (error.response.status === 500) {
+        if (error.response.status === 266) {
           alert('이미 있는 아이디 입니다.')
         }
         commit("LOGIN");
@@ -196,6 +197,7 @@ export default new Vuex.Store({
       })
       .catch((error) => {
         console.log(error);
+        alert('아이디나 전화번호를 확인해주세요.');
         commit("LOGIN");
       });
     },

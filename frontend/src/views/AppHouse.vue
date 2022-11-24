@@ -3,13 +3,11 @@
 <full-kakao-map id="map"></full-kakao-map>
 </template>
 <script>
-// import HouseSideBar from "@/components/house/HouseSideBar.vue";
 import FullKakaoMap from "@/components/house/FullKakaoMap";
 
 export default {
   name: "AppHouse",
   components: {
-    // HouseSideBar,
     FullKakaoMap,
   },
   data() {
