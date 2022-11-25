@@ -182,8 +182,11 @@ export default new Vuex.Store({
       })
       .catch((error) => {
         console.log(error);
-        if (error.response.status === 266) {
+        if (error.response.status === 409) {
           alert('이미 있는 아이디 입니다.')
+        }
+        if (error.response.status === 406) {
+          alert('비밀번호에 아이디를 포함시킬 수 없습니다.')
         }
         commit("LOGIN");
       });

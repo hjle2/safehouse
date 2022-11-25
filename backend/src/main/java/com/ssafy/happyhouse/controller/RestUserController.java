@@ -142,6 +142,7 @@ public class RestUserController {
 	}
 
 	private boolean KMP(String pw, String id) {
+		System.out.print("KMP");
 		int pwLen = pw.length();
 		int idLen = id.length();
 		int table[] = new int[idLen];
